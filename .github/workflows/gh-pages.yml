@@ -1,51 +1,43 @@
-# This is a basic workflow to help you get started with Actions
-
 name: slides-to-gh-pages
 
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build-and-deploy"
   build-and-deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      # Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      #- name: Deploy to github 🚀
-      #  uses: JamesIves/github-pages-deploy-action@4.1.0
-      #  with:
-      #    branch: gh-pages # The branch the action should deploy to.
-      #    folder: build # The folder the action should deploy.
+      # Install AsciiDoctor
+      - name: Install AsciiDoctor and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y asciidoctor asciidoctor-diagram
 
-      # Includes the AsciiDoctor GitHub Pages Action to convert adoc files to html and publish to gh-pages branch
-      # https://github.com/manoelcampos/asciidoctor-ghpages-action/blob/main/.github/workflows/asciidoctor-ghpages.yml
-      - name: asciidoctor-ghpages
-        uses: manoelcampos/asciidoctor-ghpages-action@v2
+      # Build Reveal.js slides with AsciiDoctor
+      - name: Build Reveal.js slides
+        run: |
+          asciidoctor-revealjs -r asciidoctor-diagram \
+          -a icons=font \
+          -a revealjs_theme=white \
+          -a source-highlighter=rouge \
+          -a imagesdir=images \
+          -a revealjs_slideNumber=c/t \
+          -a revealjs_transition=slide \
+          -a revealjs_hash=true \
+          -D build Dokumentation/Slides/asciidocs-Slides/index.adoc
+
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
-          #asciidoctor_params: --attribute=nofooter
-          asciidoctor_params: -r asciidoctor-diagram -a icons=font -a revealjs_theme=white -a source-highlighter=rouge -a imagesdir=images -a revealjs_slideNumber=c/t -a revealjs_transition=slide -a revealjs_hash=true -a sourcedir=src/main/java
-
-          #pdf_build: true
-          slides_build: true
-          slides_main_adoc_file: Dokumentation/Slides/asciidocs-Slides/index.adoc
-          slides_skip_asciidoctor_build: true
-          
-          
-          
-          
-          
-          
+          branch: gh-pages # The branch to deploy to
+          folder: build    # The folder containing the built files
