@@ -27,6 +27,10 @@ jobs:
       - name: Add Gems to PATH
         run: echo "$(ruby -e 'puts Gem.user_dir')/bin" >> $GITHUB_PATH
 
+      # Debug directory structure
+      - name: Debug directory
+        run: ls -R Dokumentation/Slides
+
       # Build Reveal.js slides with Asciidoctor
       - name: Build Reveal.js slides
         run: |
