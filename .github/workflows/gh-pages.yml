@@ -50,3 +50,4 @@ jobs:
         with:
           branch: gh-pages # The branch to deploy to
           folder: build    # The folder containing the built files
+          slides_main_adoc_file: Dokumentation/Slides/asciidocs-Slides/index.adoc
