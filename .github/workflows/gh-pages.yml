@@ -16,11 +16,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Install AsciiDoctor
-      - name: Install AsciiDoctor and dependencies
+      # Install Ruby and Asciidoctor dependencies
+      - name: Install Ruby and Asciidoctor
         run: |
           sudo apt-get update
-          sudo apt-get install -y asciidoctor asciidoctor-diagram
+          sudo apt-get install -y ruby ruby-dev build-essential
+          gem install asciidoctor asciidoctor-revealjs asciidoctor-diagram
 
       # Build Reveal.js slides with AsciiDoctor
       - name: Build Reveal.js slides
