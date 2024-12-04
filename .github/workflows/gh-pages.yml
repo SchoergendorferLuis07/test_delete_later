@@ -23,9 +23,9 @@ jobs:
           sudo apt-get install -y ruby ruby-dev build-essential
           gem install --user-install asciidoctor asciidoctor-revealjs asciidoctor-diagram
 
-      # Add Ruby Gems to PATH
+      # Add Ruby Gems to PATH using an environment file
       - name: Add Gems to PATH
-        run: echo "::add-path::$(ruby -e 'puts Gem.user_dir')/bin"
+        run: echo "$(ruby -e 'puts Gem.user_dir')/bin" >> $GITHUB_PATH
 
       # Build Reveal.js slides with Asciidoctor
       - name: Build Reveal.js slides
