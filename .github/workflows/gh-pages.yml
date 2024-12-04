@@ -16,14 +16,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Install Ruby and Asciidoctor dependencies
-      - name: Install Ruby and Asciidoctor
+      # Install Ruby and Gems locally
+      - name: Install Ruby and Asciidoctor locally
         run: |
           sudo apt-get update
           sudo apt-get install -y ruby ruby-dev build-essential
-          gem install asciidoctor asciidoctor-revealjs asciidoctor-diagram
+          gem install --user-install asciidoctor asciidoctor-revealjs asciidoctor-diagram
 
-      # Build Reveal.js slides with AsciiDoctor
+      # Add Ruby Gems to PATH
+      - name: Add Gems to PATH
+        run: echo "::add-path::$(ruby -e 'puts Gem.user_dir')/bin"
+
+      # Build Reveal.js slides with Asciidoctor
       - name: Build Reveal.js slides
         run: |
           asciidoctor-revealjs -r asciidoctor-diagram \
