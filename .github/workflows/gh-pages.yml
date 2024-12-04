@@ -42,7 +42,7 @@ jobs:
           -a revealjs_slideNumber=c/t \
           -a revealjs_transition=slide \
           -a revealjs_hash=true \
-          -D build Dokumentation/Slides/asciidocs-Slides/index.adoc
+          -D build Dokumentation\Slides\asciidocs-Slides\index.adoc
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
@@ -51,15 +51,3 @@ jobs:
           branch: gh-pages # The branch to deploy to
           folder: build    # The folder containing the built files
       
-      # Debug directory structure
-      - name: Debug full repository structure
-        run: ls -R
-      - name: Check for index.adoc file
-        run: |
-          if [ -f "Dokumentation/Slides/asciidocs-Slides/index.adoc" ]; then
-            echo "index.adoc found!"
-          else
-            echo "index.adoc NOT found!"
-            exit 1
-          fi
-
