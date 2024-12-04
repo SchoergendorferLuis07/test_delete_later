@@ -15,18 +15,30 @@ jobs:
       # Check out the repository
       - uses: actions/checkout@v2
 
-      # Build slides using Asciidoctor GH Pages Action
-      - name: asciidoctor-ghpages
-        uses: manoelcampos/asciidoctor-ghpages-action@v2
-        with:
-          asciidoctor_params: -r asciidoctor-diagram -a icons=font -a revealjs_theme=white -a source-highlighter=rouge -a imagesdir=images -a revealjs_slideNumber=c/t -a revealjs_transition=slide -a revealjs_hash=true
-          slides_build: true
-          slides_main_adoc_file: Dokumentation/Slides/asciidocs-Slides/index
-          slides_skip_asciidoctor_build: true
+      # Build slides using Asciidoctor
+      - name: Build slides
+        run: |
+          gem install --user-install asciidoctor asciidoctor-revealjs asciidoctor-diagram
+          export PATH="$HOME/.gem/ruby/3.0.0/bin:$PATH"
+          asciidoctor-revealjs -r asciidoctor-diagram \
+          -a icons=font \
+          -a revealjs_theme=white \
+          -a source-highlighter=rouge \
+          -a imagesdir=images \
+          -a revealjs_slideNumber=c/t \
+          -a revealjs_transition=slide \
+          -a revealjs_hash=true \
+          -D build Dokumentation/Slides/asciidocs-Slides/index.adoc
+
+      # Debug generated build folder
+      - name: Debug build folder
+        run: |
+          echo "Checking the contents of the build folder:"
+          ls -R build
 
       # Deploy to GitHub Pages on main branch
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
-          branch: main # Verwendet den main-Branch für GitHub Pages
-          folder: build # Der Ordner mit den generierten Dateien
+          branch: main
+          folder: build
