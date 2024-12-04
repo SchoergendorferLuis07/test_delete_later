@@ -23,3 +23,10 @@ jobs:
           slides_build: true
           slides_main_adoc_file: Dokumentation/Slides/asciidocs-Slides/index
           slides_skip_asciidoctor_build: true
+
+      # Deploy to GitHub Pages on main branch
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          branch: main # Verwendet den main-Branch für GitHub Pages
+          folder: build # Der Ordner mit den generierten Dateien
